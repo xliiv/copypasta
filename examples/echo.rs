@@ -3,7 +3,17 @@ extern crate copypasta;
 use copypasta::ClipboardContext;
 use copypasta::ClipboardProvider;
 
-fn main() {
+// Action to reproduce
+// 1. run the code `cargo run --example echo`
+// 2. select text in some window e.g. Firefox
+// 3. press ctrl+c
+// 4. focus some edit widget, e.g. Firefox's address bar
+// 5. press ctrl+v
+//
+// I expect the copied text will show up in the widget (see step 4)
+// but the text doesn't show up.
+
+fn fails() {
     let mut ctx = ClipboardContext::new().unwrap();
     let mut previous = "".to_string();
     loop {
@@ -11,12 +21,33 @@ fn main() {
         dbg!(&current);
 
         if current != previous {
+            previous = current.clone();
             dbg!(&previous);
             ctx.set_contents(current.clone()).unwrap();
-            // DOESN'T WORK WITH THIS LINE
-            //previous = current.clone();
         }
 
-        std::thread::sleep(std::time::Duration::from_millis(1000));
+        std::thread::sleep(std::time::Duration::from_millis(500));
     }
+}
+
+fn works() {
+    let mut ctx = ClipboardContext::new().unwrap();
+    let previous = "".to_string();
+    loop {
+        let current = ctx.get_contents().unwrap();
+        dbg!(&current);
+
+        if current != previous {
+            let previous = current.clone();
+            dbg!(&previous);
+            ctx.set_contents(current.clone()).unwrap();
+        }
+
+        std::thread::sleep(std::time::Duration::from_millis(500));
+    }
+}
+
+fn main() {
+    //works();
+    fails();
 }
