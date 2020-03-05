@@ -21,9 +21,9 @@ fn fails() {
         dbg!(&current);
 
         if current != previous {
-            previous = current.clone();
             dbg!(&previous);
             ctx.set_contents(current.clone()).unwrap();
+            previous = current;
         }
 
         std::thread::sleep(std::time::Duration::from_millis(500));
@@ -38,9 +38,9 @@ fn works() {
         dbg!(&current);
 
         if current != previous {
-            let previous = current.clone();
             dbg!(&previous);
             ctx.set_contents(current.clone()).unwrap();
+            let previous = current;
         }
 
         std::thread::sleep(std::time::Duration::from_millis(500));
@@ -48,6 +48,6 @@ fn works() {
 }
 
 fn main() {
-    //works();
     fails();
+    //works();
 }
