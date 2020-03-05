@@ -15,35 +15,35 @@ use copypasta::ClipboardProvider;
 
 fn fails() {
     let mut ctx = ClipboardContext::new().unwrap();
-    let mut previous = "".to_string();
+    let mut previous = String::new();
     loop {
         let current = ctx.get_contents().unwrap();
         dbg!(&current);
 
         if current != previous {
-            dbg!(&previous);
             ctx.set_contents(current.clone()).unwrap();
             previous = current;
+            dbg!(&previous);
         }
 
-        std::thread::sleep(std::time::Duration::from_millis(500));
+        std::thread::sleep(std::time::Duration::from_millis(100));
     }
 }
 
 fn works() {
     let mut ctx = ClipboardContext::new().unwrap();
-    let previous = "".to_string();
+    let mut previous = String::new();
     loop {
         let current = ctx.get_contents().unwrap();
         dbg!(&current);
 
-        if current != previous {
-            dbg!(&previous);
+        if true {
             ctx.set_contents(current.clone()).unwrap();
-            let previous = current;
+            previous = current;
+            dbg!(&previous);
         }
 
-        std::thread::sleep(std::time::Duration::from_millis(500));
+        std::thread::sleep(std::time::Duration::from_millis(100));
     }
 }
 
